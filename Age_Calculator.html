@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Age Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    form {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      max-width: 300px;
+      width: 100%;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+      animation: moveText 3s linear infinite alternate;
+    }
+
+    @keyframes moveText {
+      0% {
+        transform: translateX(-30%);
+      }
+      100% {
+        transform: translateX(30%);
+      }
+    }
+
+    label {
+      font-weight: bold;
+      color: #333;
+    }
+
+    input[type="number"] {
+      width: calc(33.33% - 5px);
+      padding: 10px;
+      margin: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    input[type="submit"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #0056b3;
+    }
+
+    input[type="submit"].animate {
+      animation: shakeButton 0.5s ease;
+    }
+
+    @keyframes shakeButton {
+      0%, 100% {
+        transform: translateX(0);
+      }
+      25%, 75% {
+        transform: translateX(-10px);
+      }
+      50% {
+        transform: translateX(10px);
+      }
+    }
+
+    #result {
+      margin-top: 20px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <form id="ageForm">
+    <h2>Age Calculator</h2>
+    <label for="dob">Date of Birth:</label>
+    <input type="number" id="dobDay" placeholder="Day" min="1" max="31" required>
+    <input type="number" id="dobMonth" placeholder="Month" min="1" max="12" required>
+    <input type="number" id="dobYear" placeholder="Year" min="1900" max="2100" required>
+    <input type="submit" id="calculateAgeBtn" value="Calculate Age">
+  </form>
+  <div id="result"></div>
+
+  <script>
+    document.getElementById("ageForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+      calculateAge();
+    });
+
+    document.getElementById("calculateAgeBtn").addEventListener("mouseenter", function() {
+      if (!isInputFilled()) {
+        this.classList.add("animate");
+      }
+    });
+
+    document.getElementById("calculateAgeBtn").addEventListener("animationend", function() {
+      this.classList.remove("animate");
+    });
+
+    function calculateAge() {
+      var dobDay = parseInt(document.getElementById("dobDay").value);
+      var dobMonth = parseInt(document.getElementById("dobMonth").value) - 1; // months are zero-based in JavaScript
+      var dobYear = parseInt(document.getElementById("dobYear").value);
+
+      var today = new Date();
+      var dob = new Date(dobYear, dobMonth, dobDay);
+
+      var age = today.getFullYear() - dob.getFullYear();
+      var monthDiff = today.getMonth() - dob.getMonth();
+      
+      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+        age--;
+      }
+
+      document.getElementById("result").innerHTML = "Your age is: " + age;
+    }
+
+    function isInputFilled() {
+      var dobDay = document.getElementById("dobDay").value;
+      var dobMonth = document.getElementById("dobMonth").value;
+      var dobYear = document.getElementById("dobYear").value;
+
+      return dobDay && dobMonth && dobYear;
+    }
+  </script>
+</body>
+</html>
